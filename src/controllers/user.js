@@ -1,12 +1,25 @@
-// Create db variable and get database connection here ...
-// Get QueryTypes from sequelize
+const db = require('../database/connection');
+const { QueryTypes } = require('sequelize');
 
 // Create controller add User here ...
+exports.addUsers = async (req, res) => {
+  try {
+    const { email, password, name, status } = req.body;
 
-// Create controller get Users here ...
+    const query = `INSERT INTO users (email,password,name,status) VALUES ('${email}','${password}','${name}','${status}')`;
 
-// Create controller get User by received id here ...
+    await db.sequelize.query(query);
 
-// Create controller update User here ...
-
-// Create controller delete User here ...
+    res.send({
+      status: 'success',
+      message: 'Add user finished',
+      query,
+    });
+  } catch (error) {
+    console.log(error);
+    res.send({
+      status: 'failed',
+      message: 'Server Error',
+    });
+  }
+};
